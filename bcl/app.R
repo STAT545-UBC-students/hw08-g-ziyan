@@ -7,7 +7,7 @@ library(shinythemes)
 
 bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
 
-ui <- fluidPage(theme = shinytheme("united"),
+ui <- fluidPage(theme = shinytheme("united"),  # shinny theme
   img(src = "bcl_logo.jpg", width = "500", height="180"), # reset the size of picture
   titlePanel("BC Liquor Store Prices"),
   sidebarLayout(
@@ -19,13 +19,12 @@ ui <- fluidPage(theme = shinytheme("united"),
       uiOutput("countryOutput")
     ),
     mainPanel(
-      tabsetPanel(
+      tabsetPanel(    # tab options
         tabPanel("Plot", 
-                 colourInput("col","Choose the color of the bars","red"),
+                 colourInput("col","Choose the color of the bars","red"),  # color choice
                  plotOutput("coolplot")),
         tabPanel("Table",
-                 h5(textOutput("text")),
-                 checkboxInput("sortInput","Sort by the price",value = FALSE),
+                 checkboxInput("sortInput","Sort by the price",value = FALSE),  # sort by price
                  DT::dataTableOutput("results"))
       )
       
@@ -41,7 +40,7 @@ server <- function(input, output) {
                 selected = "CANADA")
   })  
   
-  filtered <- reactive({
+  filtered <- reactive({   # data for plot
     if (is.null(input$countryInput)) {
       return(NULL)
     }    
@@ -55,7 +54,7 @@ server <- function(input, output) {
   
   })
   
-  selected <- reactive({
+  selected <- reactive({     # data for table
     if (is.null(input$countryInput)) {
       return(NULL)
     }    
@@ -87,9 +86,6 @@ server <- function(input, output) {
     selected()
   })
   
-  output$text <- renderText({
-    "We found options for you"
-  })
 }
 
 shinyApp(ui = ui, server = server)
